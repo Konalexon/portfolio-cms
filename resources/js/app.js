@@ -45,14 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (carouselStage && itemCount > 0) {
         const theta = 360 / itemCount;
-        // Calculate radius, but ensure minimum of 300px for visibility
-        let radius = Math.round((400 / 2) / Math.tan(Math.PI / itemCount));
+        // Smaller radius for tighter circle
+        let radius = Math.round((450 / 2) / Math.tan(Math.PI / itemCount));
 
-        // For 2 items, the formula gives 0, so force a reasonable radius
+        // Tighter spacing
         if (itemCount === 2) {
-            radius = 350; // Fixed radius for 2 items
-        } else if (radius < 200) {
-            radius = 200; // Minimum radius for other cases
+            radius = 380; // Closer for 2 items
+        } else if (itemCount === 3) {
+            radius = 350; // Tighter for 3 items
+        } else if (itemCount === 4) {
+            radius = 420; // Closer for 4 items
+        } else if (radius < 250) {
+            radius = 250; // Minimum for 5+ items
         }
 
         console.log(`Carousel setup: ${itemCount} items, theta=${theta}°, radius=${radius}px`);
@@ -60,8 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Position each item in 3D space
         items.forEach((item, i) => {
             const angle = theta * i;
-            item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-            console.log(`Item ${i}: rotateY(${angle}deg) translateZ(${radius}px)`);
+            // Add rotateX for cylinder curve effect
+            item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px) rotateX(-10deg)`;
+            console.log(`Item ${i}: rotateY(${angle}deg) translateZ(${radius}px) rotateX(-10deg)`);
 
             // Mark first item as active
             if (i === 0) {
@@ -181,5 +186,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // SCENE 3: CAROUSEL ANIMATION
         // (Carousel rotates on interaction, no scroll animation needed other than visibility)
+    });
+
+    // YouTube hover play functionality
+    document.querySelectorAll('.carousel-item-3d').forEach(card => {
+        const mediaContainer = card.querySelector('.media-container');
+        const youtubeIframe = card.querySelector('.youtube-iframe');
+
+        if (mediaContainer && youtubeIframe) {
+            let hoverTimeout;
+
+            card.addEventListener('mouseenter', () => {
+                // Delay slightly to avoid accidental triggers
+                hoverTimeout = setTimeout(() => {
+                    const dataSrc = youtubeIframe.getAttribute('data-src');
+                    if (dataSrc && !youtubeIframe.src) {
+                        youtubeIframe.src = dataSrc;
+                    }
+                    mediaContainer.classList.add('playing');
+                }, 500);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                clearTimeout(hoverTimeout);
+                // Stop video by removing src
+                if (youtubeIframe.src) {
+                    youtubeIframe.src = '';
+                }
+                mediaContainer.classList.remove('playing');
+            });
+        }
     });
 });

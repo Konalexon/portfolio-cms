@@ -49,9 +49,33 @@
             @if($projects->count() > 0)
                 <div class="carousel-stage" id="carouselStage">
                     @foreach($projects as $index => $project)
-                        <div class="carousel-item-3d" data-index="{{ $index }}">
-                            <img src="{{ $project->image_path ? asset('storage/' . $project->image_path) : 'https://picsum.photos/400/300?random=' . $index }}"
-                                alt="{{ $project->title }}">
+                        @php
+                            $youtubeId = null;
+                            if ($project->link && (str_contains($project->link, 'youtube.com') || str_contains($project->link, 'youtu.be'))) {
+                                preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/', $project->link, $matches);
+                                $youtubeId = $matches[1] ?? null;
+                            }
+                        @endphp
+                        <div class="carousel-item-3d" data-index="{{ $index }}" data-youtube="{{ $youtubeId }}">
+                            @if($youtubeId)
+                                <div class="media-container">
+                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg" alt="{{ $project->title }}"
+                                        class="youtube-thumbnail">
+                                    <div class="youtube-overlay">
+                                        <i class="bi bi-play-circle-fill"></i>
+                                    </div>
+                                    <iframe class="youtube-iframe"
+                                        data-src="https://www.youtube.com/embed/{{ $youtubeId }}?autoplay=1&mute=1&controls=1&rel=0"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            @else
+                                <img src="{{ $project->image_path ? asset('storage/' . $project->image_path) : 'https://picsum.photos/400/300?random=' . $index }}"
+                                    alt="{{ $project->title }}">
+                            @endif
+
                             <div class="content">
                                 <h3>{{ $project->title }}</h3>
                                 <p>{{ Str::limit($project->description, 80) }}</p>
