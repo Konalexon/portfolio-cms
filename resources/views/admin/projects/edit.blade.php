@@ -7,13 +7,24 @@
         @csrf
         @method('PUT')
         <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ $project->title }}" required>
+            <label for="title" class="form-label">Title (PL)</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ $project->getAttributes()['title'] }}"
+                required>
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
+            <label for="title_en" class="form-label">Title (EN)</label>
+            <input type="text" class="form-control" id="title_en" name="title_en"
+                value="{{ $project->getAttributes()['title_en'] ?? '' }}">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description (PL)</label>
             <textarea class="form-control" id="description" name="description" rows="5"
-                required>{{ $project->description }}</textarea>
+                required>{{ $project->getAttributes()['description'] }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="description_en" class="form-label">Description (EN)</label>
+            <textarea class="form-control" id="description_en" name="description_en"
+                rows="5">{{ $project->getAttributes()['description_en'] ?? '' }}</textarea>
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Project Image</label>

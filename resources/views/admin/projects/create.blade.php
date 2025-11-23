@@ -6,12 +6,20 @@
     <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
+            <label for="title" class="form-label">Title (PL)</label>
             <input type="text" class="form-control" id="title" name="title" required>
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
+            <label for="title_en" class="form-label">Title (EN)</label>
+            <input type="text" class="form-control" id="title_en" name="title_en">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description (PL)</label>
             <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="description_en" class="form-label">Description (EN)</label>
+            <textarea class="form-control" id="description_en" name="description_en" rows="5"></textarea>
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Project Image</label>

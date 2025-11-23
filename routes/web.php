@@ -6,6 +6,13 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'pl'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/projects/{project}', [PublicController::class, 'show'])->name('projects.show');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');

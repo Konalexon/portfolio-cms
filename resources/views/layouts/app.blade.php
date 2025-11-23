@@ -21,10 +21,24 @@
     <div class="bg-animation"></div>
 
     <!-- Floating Navigation -->
-    <div class="floating-nav">
+    <div class="floating-nav d-flex gap-3 align-items-center">
+        <div class="lang-switcher d-flex gap-2">
+            <a href="{{ route('lang.switch', 'pl') }}"
+                class="lang-link {{ app()->getLocale() == 'pl' ? 'active' : '' }}"
+                style="text-decoration: none; color: {{ app()->getLocale() == 'pl' ? '#00f3ff' : 'rgba(255,255,255,0.5)' }}; font-weight: bold;">PL</a>
+            <span class="text-white-50">|</span>
+            <a href="{{ route('lang.switch', 'en') }}"
+                class="lang-link {{ app()->getLocale() == 'en' ? 'active' : '' }}"
+                style="text-decoration: none; color: {{ app()->getLocale() == 'en' ? '#00f3ff' : 'rgba(255,255,255,0.5)' }}; font-weight: bold;">EN</a>
+        </div>
         <button class="nav-toggle" id="navToggle">
             <i class="bi bi-list"></i>
         </button>
+    </div>
+
+    <!-- Admin Link Container -->
+    <div class="admin-link-container" id="adminLinkContainer">
+        <a href="{{ route('admin.projects.index') }}" class="admin-link">Admin</a>
     </div>
 
     @if(session('success'))

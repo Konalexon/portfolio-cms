@@ -3,7 +3,7 @@
 @section('content')
     <!-- SCENE 1: INTRO (Relative Position) -->
     <div class="scene-intro" id="sceneIntro">
-        <h1 class="intro-text">PORTFOLIO / CV</h1>
+        <h1 class="intro-text">{{ __('Portfolio / CV') }}</h1>
     </div>
 
     <!-- SCENE 2: PROFILE (Relative Position) -->
@@ -20,23 +20,22 @@
 
                 <!-- Right: Content -->
                 <div class="col-md-7 text-start ps-md-5">
-                    <h2 class="display-4 fw-bold text-white mb-3">Konrad Lasota</h2>
-                    <p class="lead text-light mb-4">{{ $aboutMe ?? 'Creative Developer & Designer' }}</p>
+                    <h2 class="display-4 fw-bold text-white mb-3">{{ __('Konrad Lasota') }}</h2>
+                    <div class="lead text-light mb-4" style="font-size: 1.1rem;">
+                        <p>{!! nl2br(e(__('Profile Description'))) !!}</p>
+                    </div>
 
                     <div class="d-flex flex-wrap gap-2">
-                        <span class="badge bg-dark border border-secondary">Laravel</span>
-                        <span class="badge bg-dark border border-secondary">Vue.js</span>
-                        <span class="badge bg-dark border border-secondary">3D UI</span>
                         <span class="badge bg-dark border border-secondary">Unreal Engine</span>
                         <span class="badge bg-dark border border-secondary">Roblox Studio</span>
-                        <span class="badge bg-dark border border-secondary">Photoshop</span>
-                        <span class="badge bg-dark border border-secondary">Illustrator</span>
-                        <span class="badge bg-dark border border-secondary">Canva</span>
-                        <span class="badge bg-dark border border-secondary">PowerPoint</span>
-                        <span class="badge bg-dark border border-secondary">Blade</span>
+                        <span class="badge bg-dark border border-secondary">Unity</span>
+                        <span class="badge bg-dark border border-secondary">Laravel</span>
+                        <span class="badge bg-dark border border-secondary">PHP</span>
+                        <span class="badge bg-dark border border-secondary">HTML</span>
                         <span class="badge bg-dark border border-secondary">CSS</span>
                         <span class="badge bg-dark border border-secondary">JS</span>
-                        <span class="badge bg-dark border border-secondary">HTML</span>
+                        <span class="badge bg-dark border border-secondary">Photoshop</span>
+                        <span class="badge bg-dark border border-secondary">PowerPoint</span>
                     </div>
                 </div>
             </div>
@@ -45,6 +44,8 @@
 
     <!-- SCENE 3: PROJECTS CAROUSEL (Relative Position) -->
     <div class="scene-projects" id="sceneProjects">
+        <h2 class="text-center text-white mb-5 display-4 fw-bold"
+            style="position: absolute; top: 5%; width: 100%; z-index: 10;">{{ __('My Projects') }}</h2>
         <div class="carousel-container">
             @if($projects->count() > 0)
                 <div class="carousel-stage" id="carouselStage">
