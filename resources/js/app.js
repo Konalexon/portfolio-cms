@@ -36,21 +36,115 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileCard = document.getElementById('profileCard');
     const sceneProjects = document.getElementById('sceneProjects');
 
-    // Carousel Logic
+    // --- 3D CAROUSEL SETUP ---
     const carouselStage = document.getElementById('carouselStage');
     const items = document.querySelectorAll('.carousel-item-3d');
     const itemCount = items.length;
-    const theta = 360 / itemCount;
-    let currImage = 0;
-    let currentRotation = 0; // Store rotation state
 
-    // Setup Carousel Positions
+    console.log(`Found ${itemCount} carousel items`);
+
     if (carouselStage && itemCount > 0) {
-        const radius = Math.round((400 / 2) / Math.tan(Math.PI / itemCount));
+        const theta = 360 / itemCount;
+        // Calculate radius, but ensure minimum of 300px for visibility
+        let radius = Math.round((400 / 2) / Math.tan(Math.PI / itemCount));
+
+        // For 2 items, the formula gives 0, so force a reasonable radius
+        if (itemCount === 2) {
+            radius = 350; // Fixed radius for 2 items
+        } else if (radius < 200) {
+            radius = 200; // Minimum radius for other cases
+        }
+
+        console.log(`Carousel setup: ${itemCount} items, theta=${theta}°, radius=${radius}px`);
+
+        // Position each item in 3D space
         items.forEach((item, i) => {
-            item.style.transform = `rotateY(${i * theta}deg) translateZ(${radius}px)`;
+            const angle = theta * i;
+            item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+            console.log(`Item ${i}: rotateY(${angle}deg) translateZ(${radius}px)`);
+
+            // Mark first item as active
+            if (i === 0) {
+                item.classList.add('active');
+            }
         });
+
+        // Initial rotation
+        let currentRotation = 0;
+        carouselStage.style.transformStyle = 'preserve-3d';
         carouselStage.style.transform = `translateZ(-${radius}px) rotateY(0deg)`;
+
+        // Auto-rotation (optional - comment out if you don't want it)
+        let autoRotate = setInterval(() => {
+            currentRotation -= theta;
+            carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
+
+            // Update active class
+            const activeIndex = Math.abs(Math.round(currentRotation / theta)) % itemCount;
+            items.forEach((item, i) => {
+                if (i === activeIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }, 3000); // Rotate every 3 seconds
+
+        // Manual rotation with mouse drag
+        let isDragging = false;
+        let startX = 0;
+        let startRotation = 0;
+
+        carouselStage.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startRotation = currentRotation;
+            carouselStage.style.cursor = 'grabbing';
+            clearInterval(autoRotate); // Stop auto-rotation when user interacts
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            carouselStage.style.cursor = 'grab';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - startX;
+                currentRotation = startRotation + (deltaX * 0.5);
+                carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
+
+                // Update active class based on rotation
+                const activeIndex = Math.abs(Math.round(currentRotation / theta)) % itemCount;
+                items.forEach((item, i) => {
+                    if (i === activeIndex) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+        });
+
+        // Click to advance
+        carouselStage.addEventListener('click', (e) => {
+            if (!isDragging) {
+                clearInterval(autoRotate);
+                currentRotation -= theta;
+                carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
+
+                const activeIndex = Math.abs(Math.round(currentRotation / theta)) % itemCount;
+                items.forEach((item, i) => {
+                    if (i === activeIndex) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+        });
+    } else {
+        console.warn('Carousel not initialized: stage or items missing');
     }
 
     // Scroll Handler
@@ -88,42 +182,4 @@ document.addEventListener('DOMContentLoaded', () => {
         // SCENE 3: CAROUSEL ANIMATION
         // (Carousel rotates on interaction, no scroll animation needed other than visibility)
     });
-
-    // Carousel Rotation (Click/Touch)
-    if (carouselStage) {
-        let startX = 0;
-        let isDragging = false;
-        let startRotation = 0;
-
-        carouselStage.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startRotation = currentRotation;
-            carouselStage.style.cursor = 'grabbing';
-        });
-
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-            carouselStage.style.cursor = 'grab';
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const deltaX = e.clientX - startX;
-                currentRotation = startRotation + (deltaX * 0.5);
-                const radius = Math.round((400 / 2) / Math.tan(Math.PI / itemCount));
-                carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
-            }
-        });
-
-        // Simple click to rotate (next item)
-        carouselStage.addEventListener('click', (e) => {
-            if (!isDragging) { // Only if not dragging
-                currImage++;
-                currentRotation = currImage * -theta;
-                const radius = Math.round((400 / 2) / Math.tan(Math.PI / itemCount));
-                carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
-            }
-        });
-    }
 });

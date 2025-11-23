@@ -29,7 +29,7 @@ body {
     color: $text-color;
     overflow-x: hidden;
     position: relative;
-    perspective: 1000px; // Essential for 3D
+    perspective: 1000px;
 }
 
 h1,
@@ -147,7 +147,7 @@ h6 {
     }
 }
 
-// SCENE 2: 3D PROFILE CARD (NEW DESIGN)
+// SCENE 2: 3D PROFILE CARD
 .scene-profile {
     min-height: 100vh;
     display: flex;
@@ -229,8 +229,8 @@ h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    perspective: 1000px;
+    overflow: visible;
+    perspective: 1200px;
     position: relative;
     width: 100%;
     z-index: 6;
@@ -238,7 +238,7 @@ h6 {
 
     .carousel-container {
         width: 100%;
-        height: 600px;
+        height: 700px;
         position: relative;
         transform-style: preserve-3d;
         display: flex;
@@ -248,48 +248,62 @@ h6 {
         .carousel-stage {
             position: relative;
             width: 400px;
-            height: 500px;
+            height: 600px;
             transform-style: preserve-3d;
             transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: grab;
 
             .carousel-item-3d {
                 position: absolute;
                 width: 100%;
                 height: 100%;
-                background: rgba(10, 10, 10, 0.9);
-                border: 1px solid $neon-purple;
-                border-radius: 20px;
+                background: rgba(15, 15, 15, 0.95);
+                border: 2px solid $neon-purple;
+                border-radius: 25px;
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
-                opacity: 0.7;
-                transition: opacity 0.3s ease, border-color 0.3s ease;
-                cursor: pointer;
+                opacity: 0.5;
+                transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.5s ease;
+                backface-visibility: hidden;
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
 
                 &.active {
                     opacity: 1;
                     border-color: $neon-cyan;
-                    box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+                    box-shadow: 0 0 60px rgba(0, 243, 255, 0.4), 0 20px 50px rgba(0, 0, 0, 0.8);
+                    z-index: 10;
                 }
 
                 img {
                     width: 100%;
-                    height: 60%;
+                    height: 65%;
                     object-fit: cover;
+                    display: block;
                 }
 
                 .content {
                     padding: 1.5rem;
                     color: #fff;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
 
                     h3 {
                         font-size: 1.5rem;
                         margin-bottom: 0.5rem;
+                        color: #fff;
                     }
 
                     p {
                         font-size: 0.9rem;
                         color: #aaa;
+                        flex: 1;
+                        margin-bottom: 1rem;
+                    }
+
+                    .btn {
+                        margin-top: auto;
                     }
                 }
             }

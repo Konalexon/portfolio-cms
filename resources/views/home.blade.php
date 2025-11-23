@@ -46,20 +46,33 @@
     <!-- SCENE 3: PROJECTS CAROUSEL (Relative Position) -->
     <div class="scene-projects" id="sceneProjects">
         <div class="carousel-container">
-            <div class="carousel-stage" id="carouselStage">
-                @foreach($projects as $index => $project)
-                    <div class="carousel-item-3d" style="--i:{{ $index }};">
-                        <img src="{{ $project->image_path ? asset('storage/' . $project->image_path) : 'https://picsum.photos/400/300?random=' . $index }}"
-                            alt="{{ $project->title }}">
-                        <div class="content">
-                            <h3>{{ $project->title }}</h3>
-                            <p>{{ Str::limit($project->description, 80) }}</p>
-                            <a href="{{ route('projects.show', $project) }}"
-                                class="btn btn-sm btn-outline-primary mt-2">View</a>
+            @if($projects->count() > 0)
+                <div class="carousel-stage" id="carouselStage">
+                    @foreach($projects as $index => $project)
+                        <div class="carousel-item-3d" data-index="{{ $index }}">
+                            <img src="{{ $project->image_path ? asset('storage/' . $project->image_path) : 'https://picsum.photos/400/300?random=' . $index }}"
+                                alt="{{ $project->title }}">
+                            <div class="content">
+                                <h3>{{ $project->title }}</h3>
+                                <p>{{ Str::limit($project->description, 80) }}</p>
+                                <a href="{{ route('projects.show', $project) }}" class="btn btn-sm btn-outline-primary mt-2">View
+                                    Project</a>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center text-white py-5">
+                    <i class="bi bi-folder2-open display-1 mb-4 d-block" style="opacity: 0.3;"></i>
+                    <h3>Brak projektów</h3>
+                    <p class="text-muted">Dodaj swoje projekty z panelu admina, aby wyświetlić je w karuzeli 3D.</p>
+                    @auth
+                        <a href="{{ route('admin.projects.create') }}" class="btn btn-outline-primary mt-3">
+                            <i class="bi bi-plus-circle me-2"></i>Dodaj pierwszy projekt
+                        </a>
+                    @endauth
+                </div>
+            @endif
         </div>
     </div>
 @endsection
