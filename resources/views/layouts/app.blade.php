@@ -19,6 +19,8 @@
 
 <body>
     <div class="bg-animation"></div>
+    <div id="scroll-progress"></div>
+    <div id="custom-cursor"></div>
 
     <!-- Floating Navigation -->
     <div class="floating-nav d-flex gap-3 align-items-center">
@@ -49,16 +51,16 @@
         </div>
     @endif
 
-    @yield('content')
+    <main>
+        @yield('content')
     </main>
 
     <footer class="py-4 mt-auto text-center" style="background: transparent !important;">
         <div class="container">
             <small class="text-muted">&copy; {{ date('Y') }} {{ config('app.name', 'Portfolio') }}. Crafted with
-                Laravel.</small>
+                Laravel. <span class="text-secondary ms-2">v: Visual Polish ({{ date('H:i:s') }})</span></small>
         </div>
     </footer>
-    </div>
 
     <!-- Lightbox Container -->
     <div class="lightbox" id="lightbox">

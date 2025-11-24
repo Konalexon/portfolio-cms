@@ -262,4 +262,98 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // Page Transitions
+    document.body.classList.add('loaded');
+
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+
+            // Only intercept internal links that are not anchors or new tabs
+            if (href && href.startsWith(window.location.origin) && !href.includes('#') && this.target !== '_blank') {
+                e.preventDefault();
+                document.body.classList.remove('loaded');
+                document.body.classList.add('fading-out');
+
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 500); // Wait for fade out animation
+            }
+        });
+    });
+
+    // --- VISUAL POLISH & SMACZKI ---
+
+    // 1. Custom Cursor
+    const cursor = document.getElementById('custom-cursor');
+    if (cursor) {
+        document.body.classList.add('custom-cursor-active');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        const interactiveElements = document.querySelectorAll('a, button, .btn, .nav-toggle, .carousel-item-3d');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+    }
+
+    // 2. Scroll Progress
+    const scrollProgress = document.getElementById('scroll-progress');
+    if (scrollProgress) {
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+        });
+    }
+
+    // 3. Typewriter Effect
+    if (introText) {
+        const text = introText.innerText;
+        introText.innerText = '';
+        introText.classList.add('typing-cursor');
+
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                introText.innerText += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, Math.random() * 100 + 50); // Random delay 50-150ms
+            } else {
+                introText.classList.remove('typing-cursor');
+            }
+        }
+
+        // Start typing after a short delay
+        setTimeout(typeWriter, 500);
+    }
+
+    // 4. Magnetic Buttons (The "Cool Thing")
+    const magneticBtns = document.querySelectorAll('.btn, .nav-toggle, .lang-link');
+    magneticBtns.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            // Move button slightly towards mouse (magnetic effect)
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            // Reset position
+            btn.style.transform = 'translate(0, 0)';
+            // Add transition for smooth reset
+            btn.style.transition = 'transform 0.3s ease';
+            setTimeout(() => {
+                btn.style.transition = ''; // Remove transition so mousemove is instant
+            }, 300);
+        });
+    });
 });

@@ -29,7 +29,19 @@ body {
     color: $text-color;
     overflow-x: hidden;
     position: relative;
-    perspective: 1000px;
+    // perspective removed to fix fixed positioning context
+
+    // Page Transitions
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+
+    &.loaded {
+        opacity: 1;
+    }
+
+    &.fading-out {
+        opacity: 0;
+    }
 }
 
 h1,
@@ -446,5 +458,123 @@ h6 {
     100% {
         transform: scale(1.1);
         opacity: 1;
+    }
+}
+
+// Visual Polish & Smaczki
+
+// 1. Custom Cursor
+#custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid $neon-cyan;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    mix-blend-mode: difference;
+
+    &.hover {
+        width: 50px;
+        height: 50px;
+        background-color: rgba(0, 243, 255, 0.1);
+        border-color: $neon-purple;
+        mix-blend-mode: normal;
+    }
+}
+
+// Hide default cursor on interactive elements when custom cursor is active
+body.custom-cursor-active {
+    cursor: none;
+
+    a,
+    button,
+    .btn,
+    .nav-toggle,
+    .carousel-item-3d {
+        cursor: none;
+    }
+}
+
+// 2. Scroll Progress
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $neon-cyan, $neon-purple);
+    width: 0%;
+    z-index: 10000;
+    box-shadow: 0 0 10px $neon-cyan;
+    transition: width 0.1s linear;
+}
+
+// 3. Typewriter Cursor
+.typing-cursor::after {
+    content: '|';
+    animation: blink 1s step-start infinite;
+    color: $neon-cyan;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+// Lightbox
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    display: none; // Hidden by default
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    &.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .close-lightbox {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-size: 3rem;
+        cursor: pointer;
+        z-index: 2001;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.1) rotate(90deg);
+            color: $neon-cyan;
+        }
+    }
+
+    .lightbox-content {
+        max-width: 90%;
+        max-height: 90%;
+
+        img,
+        iframe {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+        }
     }
 }

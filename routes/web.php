@@ -13,6 +13,8 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
+
+
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/projects/{project}', [PublicController::class, 'show'])->name('projects.show');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
