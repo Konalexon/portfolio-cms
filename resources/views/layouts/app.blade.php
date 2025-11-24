@@ -57,6 +57,11 @@
 
     <footer class="py-4 mt-auto text-center" style="background: transparent !important;">
         <div class="container">
+            <div class="mb-4">
+                <button id="contactBtn" class="btn btn-lg btn-outline-light heartbeat-btn">
+                    <i class="bi bi-envelope-fill me-2"></i> {{ __('Contact Me') }}
+                </button>
+            </div>
             <small class="text-muted">&copy; {{ date('Y') }} {{ config('app.name', 'Portfolio') }}. Crafted with
                 Laravel. <span class="text-secondary ms-2">v: Visual Polish ({{ date('H:i:s') }})</span></small>
         </div>

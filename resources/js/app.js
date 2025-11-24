@@ -69,36 +69,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial rotation
         let currentRotation = 0;
+        let targetRotation = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startRotation = 0;
+        let rotationSpeed = 0.2; // Speed of auto-rotation
+
         carouselStage.style.transformStyle = 'preserve-3d';
         carouselStage.style.transform = `translateZ(-${radius}px) rotateY(0deg)`;
 
-        // Auto-rotation (optional - comment out if you don't want it)
-        let autoRotate = setInterval(() => {
-            currentRotation -= theta;
+        // Smooth Auto-Rotation Loop
+        function animateCarousel() {
+            if (!isDragging) {
+                currentRotation -= rotationSpeed;
+            }
+
             carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
 
-            // Update active class
-            const activeIndex = Math.abs(Math.round(currentRotation / theta)) % itemCount;
+            // Update active class based on rotation
+            // We use a wider threshold for "active" since it's continuous
+            const normalizedRotation = Math.abs(currentRotation) % 360;
+            const sectorSize = 360 / itemCount;
+            const activeIndex = Math.round(normalizedRotation / sectorSize) % itemCount;
+
             items.forEach((item, i) => {
-                if (i === activeIndex) {
+                // Logic to handle the wrap-around correctly
+                // This is a simplified check, might need refinement for perfect "active" state
+                // but visually the rotation is key.
+                // Let's use a distance-based approach for "active" class
+
+                // Calculate item's current angle in world space
+                let itemAngle = (theta * i) + currentRotation;
+                // Normalize to 0-360
+                itemAngle = itemAngle % 360;
+                if (itemAngle < 0) itemAngle += 360;
+
+                // Item is active if it's close to 0 degrees (front)
+                // 0 degrees is "front" in this setup?
+                // Actually, items are placed at theta * i.
+                // Stage rotates by currentRotation.
+                // So item is at (theta * i) + currentRotation.
+                // We want the one closest to 0 (or 360) to be active.
+
+                if (itemAngle > 340 || itemAngle < 20) {
                     item.classList.add('active');
                 } else {
                     item.classList.remove('active');
                 }
             });
-        }, 3000); // Rotate every 3 seconds
+
+            requestAnimationFrame(animateCarousel);
+        }
+
+        // Start the loop
+        animateCarousel();
 
         // Manual rotation with mouse drag
-        let isDragging = false;
-        let startX = 0;
-        let startRotation = 0;
-
         carouselStage.addEventListener('mousedown', (e) => {
             isDragging = true;
             startX = e.clientX;
             startRotation = currentRotation;
             carouselStage.style.cursor = 'grabbing';
-            clearInterval(autoRotate); // Stop auto-rotation when user interacts
         });
 
         window.addEventListener('mouseup', () => {
@@ -109,36 +140,26 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('mousemove', (e) => {
             if (isDragging) {
                 const deltaX = e.clientX - startX;
+                // Sensitivity factor
                 currentRotation = startRotation + (deltaX * 0.5);
-                carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
-
-                // Update active class based on rotation
-                const activeIndex = Math.abs(Math.round(currentRotation / theta)) % itemCount;
-                items.forEach((item, i) => {
-                    if (i === activeIndex) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
             }
         });
 
-        // Click to advance
-        carouselStage.addEventListener('click', (e) => {
-            if (!isDragging) {
-                clearInterval(autoRotate);
-                currentRotation -= theta;
-                carouselStage.style.transform = `translateZ(-${radius}px) rotateY(${currentRotation}deg)`;
+        // Touch support for mobile
+        carouselStage.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startRotation = currentRotation;
+        });
 
-                const activeIndex = Math.abs(Math.round(currentRotation / theta)) % itemCount;
-                items.forEach((item, i) => {
-                    if (i === activeIndex) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                const deltaX = e.touches[0].clientX - startX;
+                currentRotation = startRotation + (deltaX * 0.5);
             }
         });
     } else {
@@ -170,7 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // EXIT TRIGGER: Delay exit until we've scrolled PAST the top
                 // User wanted it to disappear "later", so we wait until the top is actually above the viewport
                 // e.g., -10% of viewport height.
-                if (rect.top < -viewportHeight * 0.1) {
+                // EXIT TRIGGER: Only exit if completely scrolled past (bottom < 0)
+                // This keeps it visible much longer as requested
+                if (rect.bottom < 0) {
                     if (profileCard.classList.contains('visible')) {
                         profileCard.classList.remove('visible');
                     }
@@ -335,25 +358,178 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 4. Magnetic Buttons (The "Cool Thing")
-    const magneticBtns = document.querySelectorAll('.btn, .nav-toggle, .lang-link');
-    magneticBtns.forEach(btn => {
+    const magneticButtons = document.querySelectorAll('.btn, .nav-toggle, .lang-link, .tech-item');
+
+    magneticButtons.forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
             const rect = btn.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
-            // Move button slightly towards mouse (magnetic effect)
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
         });
 
         btn.addEventListener('mouseleave', () => {
-            // Reset position
             btn.style.transform = 'translate(0, 0)';
-            // Add transition for smooth reset
             btn.style.transition = 'transform 0.3s ease';
             setTimeout(() => {
                 btn.style.transition = ''; // Remove transition so mousemove is instant
             }, 300);
         });
     });
+
+    // 5 COOL FEATURES JS
+
+    // 1. Particle Background
+    const canvas = document.createElement('canvas');
+    canvas.id = 'particles-canvas';
+    const bgAnimation = document.querySelector('.bg-animation');
+    if (bgAnimation) {
+        bgAnimation.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray;
+
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+
+            // Method to draw individual particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            // Check particle position, check mouse position, move the particle, draw the particle
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = '#00f3ff';
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connectParticles();
+        }
+
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                        ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(0, 243, 255,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            initParticles();
+        });
+
+        initParticles();
+        animateParticles();
+    }
+
+    // 2. Scroll Reveal
+    const revealElements = document.querySelectorAll('.scroll-reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // 3. Glitch Text Randomizer (Optional Polish)
+    const glitchText = document.querySelector('.glitch');
+    if (glitchText) {
+        setInterval(() => {
+            const original = glitchText.getAttribute('data-text');
+            // Randomly trigger a stronger glitch class or effect here if desired
+            // For now, CSS animation handles the main effect
+        }, 3000);
+    }
+
+    // 4. Contact Button Logic (Show Email)
+    const contactBtn = document.getElementById('contactBtn');
+    if (contactBtn) {
+        contactBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = 'konalinio@gmail.com';
+
+            // Try to copy to clipboard
+            navigator.clipboard.writeText(email).then(() => {
+                // Success feedback
+                const originalHtml = contactBtn.innerHTML;
+                contactBtn.innerHTML = `<i class="bi bi-check2 me-2"></i> ${email}`;
+                contactBtn.classList.remove('btn-outline-light');
+                contactBtn.classList.add('btn-light', 'text-dark');
+
+                setTimeout(() => {
+                    contactBtn.innerHTML = originalHtml;
+                    contactBtn.classList.remove('btn-light', 'text-dark');
+                    contactBtn.classList.add('btn-outline-light');
+                }, 3000);
+            }).catch(err => {
+                // Fallback if clipboard fails (just show email)
+                contactBtn.innerHTML = `<i class="bi bi-envelope-fill me-2"></i> ${email}`;
+            });
+        });
+    }
 });

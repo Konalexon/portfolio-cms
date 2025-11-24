@@ -3,12 +3,14 @@
 @section('content')
     <!-- SCENE 1: INTRO (Relative Position) -->
     <div class="scene-intro" id="sceneIntro">
-        <h1 class="intro-text">{{ __('Portfolio / CV') }}</h1>
+        <div class="glitch-wrapper">
+            <h1 class="intro-text glitch" data-text="{{ __('Portfolio / CV') }}">{{ __('Portfolio / CV') }}</h1>
+        </div>
     </div>
 
     <!-- SCENE 2: PROFILE (Relative Position) -->
     <div class="scene-profile" id="sceneProfile">
-        <div class="profile-card-3d" id="profileCard">
+        <div class="profile-card-3d scroll-reveal" id="profileCard">
             <div class="row align-items-center">
                 <!-- Left: Tilted Rectangular Image -->
                 <div class="col-md-5">
@@ -25,17 +27,27 @@
                         <p>{!! nl2br(e(__('Profile Description'))) !!}</p>
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2">
-                        <span class="badge bg-dark border border-secondary">Unreal Engine</span>
-                        <span class="badge bg-dark border border-secondary">Roblox Studio</span>
-                        <span class="badge bg-dark border border-secondary">Unity</span>
-                        <span class="badge bg-dark border border-secondary">Laravel</span>
-                        <span class="badge bg-dark border border-secondary">PHP</span>
-                        <span class="badge bg-dark border border-secondary">HTML</span>
-                        <span class="badge bg-dark border border-secondary">CSS</span>
-                        <span class="badge bg-dark border border-secondary">JS</span>
-                        <span class="badge bg-dark border border-secondary">Photoshop</span>
-                        <span class="badge bg-dark border border-secondary">PowerPoint</span>
+                    <div class="tech-stack-container">
+                        @php
+                            $techs = [
+                                ['name' => 'Unreal Engine', 'icon' => 'bi-controller'],
+                                ['name' => 'Roblox Studio', 'icon' => 'bi-box'],
+                                ['name' => 'Unity', 'icon' => 'bi-unity'],
+                                ['name' => 'Laravel', 'icon' => 'bi-layers'],
+                                ['name' => 'PHP', 'icon' => 'bi-filetype-php'],
+                                ['name' => 'HTML', 'icon' => 'bi-filetype-html'],
+                                ['name' => 'CSS', 'icon' => 'bi-filetype-css'],
+                                ['name' => 'JS', 'icon' => 'bi-filetype-js'],
+                                ['name' => 'Photoshop', 'icon' => 'bi-palette'],
+                                ['name' => 'PowerPoint', 'icon' => 'bi-easel'],
+                            ];
+                        @endphp
+                        @foreach($techs as $tech)
+                            <div class="tech-item" data-tilt>
+                                <i class="bi {{ $tech['icon'] }}"></i>
+                                <span>{{ $tech['name'] }}</span>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
