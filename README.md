@@ -15,7 +15,7 @@
 
 <br />
 
-![Home Page](public/screenshots/home.png)
+
 
 </div>
 
@@ -60,7 +60,7 @@ We believe that managing your online presence should be as intuitive as creating
 ### Landing Page
 *The gateway to your creative world.*
 
-![Home Page](public/screenshots/home.png)
+
 
 </div>
 
@@ -123,28 +123,28 @@ We are constantly evolving. Here is what's next for Portfolio CMS:
 
 ### Portfolio / CV (Intro)
 **PL**
-![Intro PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/intro_pl_1764881816365.png)
+![Intro PL](public/screenshots/intro_pl.png)
 
 **EN**
-![Intro EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/intro_en_1764881926060.png)
+![Intro EN](public/screenshots/intro_en.png)
 
 ### Profile / Profil
 **PL**
-![Profile PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/profile_pl_1764881827246.png)
+![Profile PL](public/screenshots/profile_pl.png)
 
 **EN**
-![Profile EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/profile_en_1764881937617.png)
+![Profile EN](public/screenshots/profile_en.png)
 
 ### Projects / Projekty
 **PL**
-![Projects PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/projects_pl_1764881839507.png)
+![Projects PL](public/screenshots/projects_pl.png)
 
 **EN**
-![Projects EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/projects_en_1764881953162.png)
+![Projects EN](public/screenshots/projects_en.png)
 
 ### Admin Panel / Panel Administratora
 **PL**
-![Admin PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/admin_pl_1764881885697.png)
+![Admin PL](public/screenshots/admin_pl.png)
 
 **EN**
-![Admin EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/admin_en_1764881979353.png)
+![Admin EN](public/screenshots/admin_en.png)
