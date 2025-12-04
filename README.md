@@ -116,3 +116,35 @@ We are constantly evolving. Here is what's next for Portfolio CMS:
 *Designed & Engineered with ❤️*
 
 </div>
+
+---
+
+## 📸 Screenshots / Zrzuty ekranu
+
+### Portfolio / CV (Intro)
+**PL**
+![Intro PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/intro_pl_1764881816365.png)
+
+**EN**
+![Intro EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/intro_en_1764881926060.png)
+
+### Profile / Profil
+**PL**
+![Profile PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/profile_pl_1764881827246.png)
+
+**EN**
+![Profile EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/profile_en_1764881937617.png)
+
+### Projects / Projekty
+**PL**
+![Projects PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/projects_pl_1764881839507.png)
+
+**EN**
+![Projects EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/projects_en_1764881953162.png)
+
+### Admin Panel / Panel Administratora
+**PL**
+![Admin PL](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/admin_pl_1764881885697.png)
+
+**EN**
+![Admin EN](C:/Users/konal/.gemini/antigravity/brain/fff2f927-0546-413b-8009-9b05b89ba1b5/admin_en_1764881979353.png)

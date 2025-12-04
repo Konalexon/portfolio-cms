@@ -6,27 +6,22 @@
             <div class="col-md-10">
                 <a href="{{ route('home') }}" class="btn btn-outline-light mb-4">&larr; {{ __('Back to Home') }}</a>
 
-                <div class="card overflow-hidden bg-transparent border-0">
-                    @php
-                        $youtubeId = null;
-                        if ($project->link && (str_contains($project->link, 'youtube.com') || str_contains($project->link, 'youtu.be'))) {
-                            preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/', $project->link, $matches);
-                            $youtubeId = $matches[1] ?? null;
-                        }
-                    @endphp
+                <div class="project-container">
+                    <div class="d-flex justify-content-center mb-4">
+                        @if($project->youtube_id)
+                            <div class="ratio ratio-16x9 rounded-4 overflow-hidden border border-secondary shadow-lg"
+                                style="max-width: 800px; width: 100%;">
+                                <iframe src="https://www.youtube.com/embed/{{ $project->youtube_id }}?rel=0"
+                                    title="YouTube video" allowfullscreen></iframe>
+                            </div>
+                        @elseif($project->image_path)
+                            <img src="{{ asset('storage/' . $project->image_path) }}"
+                                class="img-fluid rounded-4 border border-secondary shadow-lg" alt="{{ $project->title }}"
+                                style="max-height: 600px; width: auto; max-width: 100%; object-fit: contain;">
+                        @endif
+                    </div>
 
-                    @if($youtubeId)
-                        <div class="ratio ratio-16x9 mb-4 rounded-4 overflow-hidden border border-secondary shadow-lg">
-                            <iframe src="https://www.youtube.com/embed/{{ $youtubeId }}?rel=0" title="YouTube video"
-                                allowfullscreen></iframe>
-                        </div>
-                    @elseif($project->image_path)
-                        <img src="{{ asset('storage/' . $project->image_path) }}"
-                            class="img-fluid rounded-4 mb-4 border border-secondary shadow-lg w-100" alt="{{ $project->title }}"
-                            style="object-fit: cover;">
-                    @endif
-
-                    <div class="card-body p-0">
+                    <div class="p-0">
                         <h1 class="display-3 fw-bold mb-4 text-white" style="text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);">
                             {{ $project->title }}
                         </h1>
@@ -46,7 +41,7 @@
                             </p>
                         </div>
 
-                        @if($project->link && !$youtubeId)
+                        @if($project->link && !$project->youtube_id)
                             <a href="{{ $project->link }}" target="_blank" class="btn btn-primary btn-lg px-5 rounded-pill">
                                 {{ __('Visit Project') }} <i class="bi bi-box-arrow-up-right ms-2"></i>
                             </a>

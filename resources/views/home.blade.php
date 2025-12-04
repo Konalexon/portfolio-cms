@@ -62,23 +62,16 @@
             @if($projects->count() > 0)
                 <div class="carousel-stage" id="carouselStage">
                     @foreach($projects as $index => $project)
-                        @php
-                            $youtubeId = null;
-                            if ($project->link && (str_contains($project->link, 'youtube.com') || str_contains($project->link, 'youtu.be'))) {
-                                preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/', $project->link, $matches);
-                                $youtubeId = $matches[1] ?? null;
-                            }
-                        @endphp
-                        <div class="carousel-item-3d" data-index="{{ $index }}" data-youtube="{{ $youtubeId }}">
-                            @if($youtubeId)
+                        <div class="carousel-item-3d" data-index="{{ $index }}" data-youtube="{{ $project->youtube_id }}">
+                            @if($project->youtube_id)
                                 <div class="media-container">
-                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg" alt="{{ $project->title }}"
-                                        class="youtube-thumbnail">
+                                    <img src="https://img.youtube.com/vi/{{ $project->youtube_id }}/maxresdefault.jpg"
+                                        alt="{{ $project->title }}" class="youtube-thumbnail">
                                     <div class="youtube-overlay">
                                         <i class="bi bi-play-circle-fill"></i>
                                     </div>
                                     <iframe class="youtube-iframe"
-                                        data-src="https://www.youtube.com/embed/{{ $youtubeId }}?autoplay=1&mute=1&controls=1&rel=0"
+                                        data-src="https://www.youtube.com/embed/{{ $project->youtube_id }}?autoplay=1&mute=1&controls=1&rel=0"
                                         frameborder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen>

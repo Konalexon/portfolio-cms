@@ -30,4 +30,19 @@ class Project extends Model
         }
         return $value;
     }
+
+    public function getYoutubeIdAttribute()
+    {
+        if (!$this->link) {
+            return null;
+        }
+
+        $pattern = '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/';
+
+        if (preg_match($pattern, $this->link, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
 }

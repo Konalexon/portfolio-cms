@@ -1,5 +1,5 @@
 import './bootstrap';
-import 'bootstrap';
+
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Portfolio JS Loaded 🚀');
